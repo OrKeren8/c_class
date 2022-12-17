@@ -8,31 +8,42 @@ typedef struct CourseInfo
 {
     int courseNum;
     int grade;
-}COURSE_INFO;
+} COURSE_INFO;
 
 void welcomeCall();
-void getSemesterCourses(char semester, COURSE_INFO courseArr[]);
-void sortCourses( COURSE_INFO data[], int size);
+int getSemesterCourses(char semester, COURSE_INFO courseArr[]);
+void sortCourses(COURSE_INFO data[], int size);
 
 void main()
 {
     COURSE_INFO firstSemesterCoursesArr[MAX_COURSES];
     COURSE_INFO secondSemesterCoursesArr[MAX_COURSES];
+    int numOfCoursesA, numOfCoursesB;
+
     welcomeCall();
-    getSemesterCourses(SEMESTER_A, firstSemesterCoursesArr);
-    getSemesterCourses(SEMESTER_B, secondSemesterCoursesArr);
+    numOfCoursesA = getSemesterCourses(SEMESTER_A, firstSemesterCoursesArr);
+    numOfCoursesB = getSemesterCourses(SEMESTER_B, secondSemesterCoursesArr);
+    sortCourses(firstSemesterCoursesArr, numOfCoursesA);
 }
 
-void sortCourses(COURSE_INFO data[], int size)
+void sortCourses(COURSE_INFO data[], int dataLen)
 {
     COURSE_INFO tempCourseInfo;
-    for(int i=0; i<size-1; i++) 
+    for (int j=dataLen-1; j>0; j--)
     {
-        if(data[i].courseNum < data[i+1].courseNum)
+        for (int i=0; i<j; i++)
         {
-            tempCourseInfo = data[i];
-            data
+            if (data[i].courseNum > data[i + 1].courseNum)
+            {
+                tempCourseInfo = data[i];
+                data[i] = data[i + 1];
+                data[i + 1] = tempCourseInfo;
+            }
         }
+    }
+    for (int j=0; j < dataLen-1; j++)
+    {
+        printf("%d", data[j].courseNum);
     }
 }
 
@@ -47,7 +58,7 @@ void welcomeCall()
            "and bye bye Pizzeria\n");
 }
 
-void getSemesterCourses(char semester, COURSE_INFO courseArr[])
+int getSemesterCourses(char semester, COURSE_INFO courseArr[])
 {
     /*get courses data from the user of a specific semester
 
@@ -64,4 +75,5 @@ void getSemesterCourses(char semester, COURSE_INFO courseArr[])
         printf("Enter course number and grade: ");
         scanf("%d %d", &courseArr[i].courseNum, &courseArr[i].grade);
     }
+    return numOfCourses;
 }
