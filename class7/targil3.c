@@ -13,7 +13,7 @@ void main()
     printf("%d %d", arr[index], arr[index + 1]);
 }
 
-int findChange(int arr[], int n);
+int findChange(int arr[], int n)
 {
     int i=1;
     while((arr[i] % 2) == 0)

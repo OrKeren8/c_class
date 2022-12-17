@@ -4,14 +4,15 @@
 #define SEMESTER_A 'A'
 #define SEMESTER_B 'B'
 
-struct CourseInfo
+typedef struct CourseInfo
 {
     int courseNum;
     int grade;
-} typedef COURSE_INFO;
+}COURSE_INFO;
 
 void welcomeCall();
 void getSemesterCourses(char semester, COURSE_INFO courseArr[]);
+void sortCourses( COURSE_INFO data[], int size);
 
 void main()
 {
@@ -20,6 +21,19 @@ void main()
     welcomeCall();
     getSemesterCourses(SEMESTER_A, firstSemesterCoursesArr);
     getSemesterCourses(SEMESTER_B, secondSemesterCoursesArr);
+}
+
+void sortCourses(COURSE_INFO data[], int size)
+{
+    COURSE_INFO tempCourseInfo;
+    for(int i=0; i<size-1; i++) 
+    {
+        if(data[i].courseNum < data[i+1].courseNum)
+        {
+            tempCourseInfo = data[i];
+            data
+        }
+    }
 }
 
 void welcomeCall()
