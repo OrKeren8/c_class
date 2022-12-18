@@ -1,3 +1,6 @@
+// Or Keren
+// 315155531
+
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -25,6 +28,7 @@ void printCNum(int data[], int size);
 COURSE_INFO findMinGrade(COURSE_INFO data[], int size);
 int getExercisesInCourse(int exercises[], int courseNum);
 int findFailPass(int grades[], int size);
+int reorderGrades(int grades[], int size, int limit);
 
 void main()
 {
@@ -32,22 +36,24 @@ void main()
     COURSE_INFO worstCourse;
     int uniteCourse[UNITE_COURSES_SIZE], interCourse[MAX_COURSES];
     int dataALen, dataBLen, uniteCourseLen, interCourseLen;
-    int exercises[MAX_EXERCISES], exercisesLen, exerciseIndex;
+    int exercises[MAX_EXERCISES], exercisesLen, exerciseIndex, limitGrade, failedExercises;
 
     welcomeCall();
 
+    // get semester's courses
     dataALen = getSemesterCourses(SEMESTER_A, dataA);
     dataBLen = getSemesterCourses(SEMESTER_B, dataB);
 
+    // sorting courses
     sortCourses(dataA, dataALen);
     sortCourses(dataB, dataBLen);
     printf("\n");
-
     printf("Sorted courses of semester %c:\n", SEMESTER_A);
     printCourses(dataA, dataALen);
     printf("Sorted courses of semester %c:\n", SEMESTER_B);
     printCourses(dataB, dataBLen);
 
+    // get united and intersect arrays
     uniteCourseLen = unite(dataA, dataALen, dataB, dataBLen, uniteCourse);
     interCourseLen = intersect(dataA, dataALen, dataB, dataBLen, interCourse);
     printf("courses taken in semester A or semester B: ");
@@ -56,11 +62,22 @@ void main()
     printCNum(interCourse, interCourseLen);
     printf("\n");
 
+    // check the worst course of the student
     worstCourse = findMinGrade(dataA, dataALen);
     printf("Minimum grade in semester A is: %d in course #%d\n\n", worstCourse.grade, worstCourse.courseNum);
 
+    // handle exercises of the student's worst course
     exercisesLen = getExercisesInCourse(exercises, worstCourse.courseNum);
     exerciseIndex = findFailPass(exercises, exercisesLen);
+    printf("Please enter a limit grade: ");
+    scanf("%d", &limitGrade);
+    printf("\n");
+    failedExercises = reorderGrades(exercises, exercisesLen, limitGrade);
+    printf("After reordering grades, the grades smaller than %d are: ", limitGrade);
+    for (int i = 0; i < failedExercises; i++)
+    {
+        printf("%d ", exercises[i]);
+    }
 }
 
 void welcomeCall()
@@ -107,7 +124,7 @@ void sortCourses(COURSE_INFO data[], int dataLen)
     COURSE_INFO tempCourseInfo;
     for (int j = dataLen - 1; j > 0; j--)
     {
-        for (int i = 0; i <= j; i++)
+        for (int i = 0; i < j; i++)
         {
             if (data[i].courseNum > data[i + 1].courseNum)
             {
@@ -125,7 +142,9 @@ void printCourses(COURSE_INFO data[], int size)
            "======= =====\n");
     for (int i = 0; i <= size - 1; i++)
     {
-        printf("%d\t%d\n", data[i].courseNum, data[i].grade);
+        printf("%d", data[i].courseNum);
+        printf("\t");
+        printf("%d\n", data[i].grade);
     }
     printf("\n");
 }
@@ -248,7 +267,7 @@ COURSE_INFO findMinGrade(COURSE_INFO data[], int size)
     worstCourse.grade = 100;
     for (int i = 0; i < size; i++)
     {
-        if (data[i].grade < worstCourse.grade)
+        if (data[i].grade <= worstCourse.grade)
         {
             worstCourse.grade = data[i].grade;
             worstCourse.courseNum = data[i].courseNum;
@@ -268,10 +287,10 @@ int getExercisesInCourse(int exercises[], int courseNum)
     */
     int numOfExercises;
 
-    printf("how many exercises were given in course #%d? ", courseNum);
+    printf("How many exercises were given in course #%d? ", courseNum);
     scanf("%d", &numOfExercises);
     printf("\n");
-    printf("Enter exercise grades: \n");
+    printf("Enter exercises grades: \n");
     for (int i = 0; i < numOfExercises; i++)
     {
         scanf("%d", &exercises[i]);
@@ -303,12 +322,50 @@ int findFailPass(int grades[], int size)
 
     for (int i = 0; i < size - 1 && notFound; i++)
     {
-        if (grades[i] < PASS_GRADE && grades[i + 1] > PASS_GRADE)
+        if (grades[i] <= PASS_GRADE && grades[i + 1] >= PASS_GRADE)
         {
             notFound = false;
             gradeIndex = i;
         }
     }
-    printf("Index of Fail-Pass is: %d", gradeIndex);
+    printf("Index of Fail-Pass is: %d\n", gradeIndex);
     return gradeIndex;
+}
+
+int reorderGrades(int grades[], int size, int limit)
+{
+    /*record grades from an array and check which of them did not pass
+
+    the function check grades array and place every grade that under the limit
+    at the start of the array
+    the run time of this function is O(size)
+    Args:
+        int grades[]: array of grades
+        int size: length of grades array
+        int limit: the threshold of the grade to compare with
+    return: int i: the number of grades that under the limit
+    */
+    int i = 0, j = 1;
+    int tempGrade;
+    while (i < size && j < size)
+    {
+        if (grades[i] < limit)
+        {
+            i++;
+        }
+        if ((grades[j] < limit) && (grades[j - 1] >= limit))
+        {
+            if (grades[i] >= limit)
+            {
+                tempGrade = grades[i];
+                grades[i] = grades[j];
+                grades[j] = tempGrade;
+            }
+        }
+        else
+        {
+            j++;
+        }
+    }
+    return i;
 }
