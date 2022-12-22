@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define MAX_NAME_LEN 11
-#define MAX_FULL_NAME_LEN ((MAX_NAME_LEN*2)-1)
+#define MAX_FULL_NAME_LEN ((MAX_NAME_LEN*2))
 #define MAX_COURSES 2
 #define NUM_OF_GROUPS 3
 #define NUM_OF_STUDENTS_IN_GROUP 6
@@ -26,20 +26,16 @@ typedef struct Student{
 
 void welcomeCall();
 void getStudentsData(STUDENT groups[][NUM_OF_STUDENTS_IN_GROUP]);
-void getStudentData(STUDENT *student);
+void getStudentData(STUDENT *student, char semesterName);
 void getStudentName(char fullName[]);
 int getIDNumber();
+int getNumberOfCourses(char semesterName);
 
 
 
 void main()
 {
-    // STUDENT groupA[NUM_OF_STUDENTS_IN_GROUP] = {0};
-    // STUDENT groupB[NUM_OF_STUDENTS_IN_GROUP] = {0};
-    // STUDENT groupC[NUM_OF_STUDENTS_IN_GROUP] = {0};
-
     STUDENT groups[NUM_OF_GROUPS][NUM_OF_STUDENTS_IN_GROUP] = {0};
-    char fullName[MAX_FULL_NAME_LEN] = "";
 
     welcomeCall();
     getStudentsData(groups);
@@ -61,17 +57,38 @@ void getStudentsData(STUDENT groups[][NUM_OF_STUDENTS_IN_GROUP])
 {
     for (int group=0; group<NUM_OF_GROUPS; group++){
         printf("Enter students data for GROUP %c\n", GROUPS_NAMES[group]);
-        printf("-----------------------------");
+        printf("________________________________\n\n");
         for(int student=0; student<NUM_OF_STUDENTS_IN_GROUP; student++){
-            getStudentData(&groups[group][student]);
+            getStudentData(&groups[group][student], GROUPS_NAMES[group]);
         }
     }
 }
 
-void getStudentData(STUDENT *student)
+// int getSemesterCourses(char semester, COURSE_INFO courseArr[])
+// {
+//     /*get courses data from the user of a specific semester
+
+//     Args:
+//         char semester: the name of the semester
+//         COURSE_INFO courseArr[]: array of course info structure
+//     return: int numOfCourses: the number of courses a student took in a semester
+//     */
+//     int numOfCourses;
+//     printf("Please enter number of courses in semester %c: \n", semester);
+//     scanf("%d", &numOfCourses);
+//     for (int i = 0; i < numOfCourses; i++)
+//     {
+//         printf("Enter course number and grade: \n");
+//         scanf("%d %d", &courseArr[i].courseNum, &courseArr[i].grade);
+//     }
+//     return numOfCourses;
+// }
+
+void getStudentData(STUDENT *student, char semesterName)
 {
     getStudentName(student->name);
     student->identity = getIDNumber();
+    // student->nofCourses = getNumberOfCourses(semesterName);
 }
 
 void getStudentName(char fullName[])
@@ -86,13 +103,10 @@ void getStudentName(char fullName[])
     */
     char firstName[MAX_NAME_LEN] = "";
     char lastName[MAX_NAME_LEN] = "";
-    strcpy(fullName, "");
 
     printf("Enter student first name and last name (seperated by spaces): ");
-    scanf("%s %s", &firstName, &lastName);
-    printf("%s\n%s", firstName, lastName);
-
-    strcat(fullName, firstName);
+    scanf("%s %s", firstName, lastName);
+    strcpy(fullName, firstName);
     strcat(fullName, " ");
     strcat(fullName, lastName);
 }
@@ -100,56 +114,14 @@ void getStudentName(char fullName[])
 int getIDNumber()
 {
     /*get user ID number
-    get user id and validate if it is a real id number with check digit
+    get student id number
     
     Args: none
     return: 
-        int id: the id number of the user
+        int id: the id number of a student
     */
-    int id, sum, wholeID;
-    int currentCheckDigit, realCheckDigit;
-    int digit, subDigit, i;
-    bool validID = false;
-
-    while (!validID)
-    {
-        sum = 0, i = 0;
-
-        printf("Please enter your ID number: \n");
-        scanf("%d", &id);
-        wholeID = id;
-        
-        if(id <= 999999999 && id != 0)
-        {
-            currentCheckDigit = id%10;
-            id = id/10;
-            while(id > 0)
-            {
-                
-                digit = id%10;
-                id = id / 10;
-                if (i%2)
-                    digit *= 1;
-                else
-                    digit *= 2; 
-                while(digit > 0)
-                {
-                    subDigit = digit%10;
-                    digit = digit / 10;
-                    sum += subDigit;
-                }
-                i ++;
-            }
-            
-            realCheckDigit = 10 - (sum % 10);  // calculate id check digit
-            if (realCheckDigit == currentCheckDigit)
-                validID = true;
-            else
-                printf("Invalid check digit! Try again.\n");
-        } 
-        else
-            printf("Invalid ID number! Try again.\n");
-    }
-    printf("\n");
-    return wholeID;
+    int id;
+    printf("Enter student ID: \n");
+    scanf("%d", &id);
+    return id;
 }
