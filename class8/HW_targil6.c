@@ -33,28 +33,8 @@ void getStudentName(char fullName[]);
 int getIDNumber();
 int getNumberOfCourses(char semesterName);
 int getSemesterCourses(COURSE_INFO courseArr[]);
+int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum, char stuNames[][MAX_FULL_NAME_LEN]);
 
-int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum, char stuNames[][MAX_FULL_NAME_LEN])
-{
-    int counter = 0, numOfStudents = 0;
-    for (int i = 0; i < rows; i++)
-    {
-        numOfStudents += counter;
-        counter = 0;
-        for (int j = 0; j < cols; j++){
-            for (int k=0; k<stuData[i][j].nofCourses; k++){
-                if (stuData[i][j].course_info[k].courseNum == courseNum){
-                    strcpy(stuNames[counter], "Group");
-                    stuNames[counter][5] = GROUPS_NAMES[i];
-                    strcat(stuNames[counter], " ");
-                    strcat(stuNames[counter], stuData[i][j].name);
-                    counter++;
-                }
-            }
-        }
-    }
-    return numOfStudents;
-}
 
 void main()
 {
@@ -174,4 +154,37 @@ int getSemesterCourses(COURSE_INFO courseArr[])
         scanf("%d %d", &courseArr[i].courseNum, &courseArr[i].grade);
     }
     return numOfCourses;
+}
+
+int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum, char stuNames[][MAX_FULL_NAME_LEN])
+{
+    /*get the names of students that have learned a specific course,
+    and insert them in a two dimensional array
+
+    Args:
+        STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP]: two dimension array of STUDENT structs
+        int rows: number of rows in the student array
+        int cols:number of cols in students array
+        int courseNum: the number of the course we check
+        char stuNames[][MAX_FULL_NAME_LEN]: array of strings to fell in the names of the students
+    return: int numOfStudents: the number of students that learned the course
+    */
+    int counter = 0, numOfStudents = 0;
+    for (int i = 0; i < rows; i++)
+    {
+        numOfStudents += counter;
+        counter = 0;
+        for (int j = 0; j < cols; j++){
+            for (int k=0; k<stuData[i][j].nofCourses; k++){
+                if (stuData[i][j].course_info[k].courseNum == courseNum){
+                    strcpy(stuNames[counter], "Group");
+                    stuNames[counter][5] = GROUPS_NAMES[i];
+                    strcat(stuNames[counter], " ");
+                    strcat(stuNames[counter], stuData[i][j].name);
+                    counter++;
+                }
+            }
+        }
+    }
+    return numOfStudents;
 }
