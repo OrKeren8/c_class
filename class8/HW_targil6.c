@@ -7,7 +7,7 @@
 
 #define MAX_NAME_LEN 11
 #define MAX_FULL_NAME_LEN ((MAX_NAME_LEN * 2) + 7) // + the size of the string "GroupA "
-#define MAX_COURSES 2
+#define MAX_COURSES 10
 #define NUM_OF_GROUPS 3
 #define NUM_OF_STUDENTS_IN_GROUP 6
 #define GROUPS_NAMES "ABC"
@@ -41,6 +41,8 @@ int getSemesterCourses(COURSE_INFO courseArr[]);
 int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum, char stuNames[][MAX_FULL_NAME_LEN]);
 int subInString(char string[], char subString[]);
 void replaceSubInString(char string[], char subString[], char desireString[]);
+void printGrades(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum);
+void printCNum(int data[], int size, int offset);
 
 void main()
 {
@@ -83,6 +85,62 @@ void main()
     for (int i = 0; i < numOfStudents; i++)
         printf("%s \n", stuNames[i]);
     printf("\n");
+
+    printGrades(groups, NUM_OF_GROUPS, NUM_OF_STUDENTS_IN_GROUP, courseNum);
+}
+
+void printCNum(int data[], int size, int offset)
+{
+    /*this function prints every item in array of integers
+
+    Args:
+        int data[]: array of integers
+        int size: the length of the array
+        int offset: where to start printing
+    return: none
+    */
+    for (int i = offset; i < size; i++)
+    {
+        printf("%d ", data[i]);
+    }
+    printf("\n");
+}
+
+void printGrades(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum)
+{
+    /*print all of the grades from specific course
+
+    Args:
+        STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP]: two dimension array of students
+        int rows: number of groups
+        int cols: number of students in a group
+        int courseNum: number of the course
+    return: None
+    */
+    int grades[NUM_OF_GROUPS][NUM_OF_STUDENTS_IN_GROUP + 1] = {0};
+    int numOfGrades=0; 
+
+    for (int i=0; i<rows; i++){
+        for(int j=0; j<cols; j++){
+            for(int k=0; k<stuData[i][j].nofCourses; k++){
+                if (stuData[i][j].course_info[k].courseNum == courseNum){
+                    grades[i][numOfGrades+1] = stuData[i][j].course_info[k].grade;
+                    numOfGrades++;
+                }
+            }
+        }
+        grades[i][0] = numOfGrades;
+        numOfGrades=0;
+    }
+
+    printf("Grades in course#%d:\n", courseNum);
+    for(int i=0; i<rows; i++){
+        printf("Group%c: ", GROUPS_NAMES[i]);
+        if (grades[i][0] != 0)
+            printCNum(grades[i], (grades[i][0]+1), 1);
+        else
+            printf("\n");
+    }
 }
 
 void welcomeCall()
