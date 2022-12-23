@@ -11,6 +11,9 @@
 #define NUM_OF_GROUPS 3
 #define NUM_OF_STUDENTS_IN_GROUP 6
 #define GROUPS_NAMES "ABC"
+#define MAX_STRING_LEN 50
+#define NONO_NAME "Lois"
+#define BETTER_NAME "Lane"
 
 typedef struct CourseInfo
 {
@@ -34,7 +37,7 @@ int getIDNumber();
 int getNumberOfCourses(char semesterName);
 int getSemesterCourses(COURSE_INFO courseArr[]);
 int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum, char stuNames[][MAX_FULL_NAME_LEN]);
-
+void replaceSubString(char string[], char subString[], char desireString[]);
 
 void main()
 {
@@ -50,10 +53,20 @@ void main()
     scanf("%d", &courseNum);
     numOfStudents = getStudentNames(groups, NUM_OF_GROUPS, NUM_OF_STUDENTS_IN_GROUP, courseNum, stuNames);
     printf("Names of students in course#%d:\n", courseNum);
-    for (int i = 0; i < numOfStudents; i++)
-    {
+    for (int i = 0; i < numOfStudents; i++){
         printf("%s \n", stuNames[i]);
     }
+    printf("\n");
+
+    //replace words
+    printf("Names after changing \"%s\" to \"%s\":\n", NONO_NAME, BETTER_NAME);
+    for(int i=0; i<numOfStudents; i++){
+        replaceSubString(stuNames[i], NONO_NAME, BETTER_NAME);
+    }
+    for (int i = 0; i < numOfStudents; i++){
+        printf("%s \n", stuNames[i]);
+    }
+    printf("\n");
 }
 
 void welcomeCall()
@@ -187,4 +200,32 @@ int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int c
         }
     }
     return numOfStudents;
+}
+
+void replaceSubString(char string[], char subString[], char desireString[])
+{
+    /*replace a substring in a string with other one 
+    
+    Args: 
+        char string[]: the string we want to modify
+        char subString[]: the sub string we want to replace
+        char desireString[]: the string we wont instead
+    return: none
+    */
+    int stringLen = strlen(string);
+    int subStringLen = strlen(subString);
+    char subStringUnderTest[MAX_STRING_LEN] = "";
+
+    for (size_t i = 0; i <= (stringLen-subStringLen); i++){
+        if (string[i] == subString[0]){
+            for (size_t c = 0; c < subStringLen; c++){
+                subStringUnderTest[c] = string[i+c];
+            }
+            if (strcmp(subStringUnderTest, subString) == 0){
+                for (size_t c = 0; c < subStringLen; c++){
+                    string[i+c] = desireString[c];
+                }
+            }
+        }
+    }
 }
