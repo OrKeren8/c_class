@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define MAX_NAME_LEN 11
-#define MAX_FULL_NAME_LEN ((MAX_NAME_LEN*2))
+#define MAX_FULL_NAME_LEN ((MAX_NAME_LEN*2) + 7) // + the size of the string "GroupA "
 #define MAX_COURSES 2
 #define NUM_OF_GROUPS 3
 #define NUM_OF_STUDENTS_IN_GROUP 6
@@ -30,7 +30,23 @@ void getStudentData(STUDENT *student, char semesterName);
 void getStudentName(char fullName[]);
 int getIDNumber();
 int getNumberOfCourses(char semesterName);
+int getSemesterCourses(char semester, COURSE_INFO courseArr[]);
 
+
+int getStudentNames( STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum, char stuNames[][MAX_FULL_NAME_LEN])
+{
+    int counter = 0, numOfStudents = 0;
+    for (int i=0; i<rows; i++){
+        numOfStudents += counter;
+        counter = 0;
+        for (int j=0; j<cols; j++){
+            if(stuData[i][j].course_info->courseNum == courseNum){
+                strcpy(stuNames[i][counter], stuData[i][j].name);
+                counter++; 
+            }
+        }
+    }
+}
 
 
 void main()
@@ -39,6 +55,7 @@ void main()
 
     welcomeCall();
     getStudentsData(groups);
+    int getStudentNames( STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum, char stuNames[][MAX_FULL_NAME_LEN])
 }
 
 void welcomeCall()
@@ -55,6 +72,14 @@ void welcomeCall()
 
 void getStudentsData(STUDENT groups[][NUM_OF_STUDENTS_IN_GROUP])
 {
+    /*feel two dimension array of Student structures
+    
+    Args:
+        STUDENT groups[][NUM_OF_STUDENTS_IN_GROUP]: two dimensional array of Student structures to feel in
+    
+    return: none
+    */
+   /////////need to forsl
     for (int group=0; group<NUM_OF_GROUPS; group++){
         printf("Enter students data for GROUP %c\n", GROUPS_NAMES[group]);
         printf("________________________________\n\n");
@@ -62,33 +87,20 @@ void getStudentsData(STUDENT groups[][NUM_OF_STUDENTS_IN_GROUP])
             getStudentData(&groups[group][student], GROUPS_NAMES[group]);
         }
     }
-}
-
-// int getSemesterCourses(char semester, COURSE_INFO courseArr[])
-// {
-//     /*get courses data from the user of a specific semester
-
-//     Args:
-//         char semester: the name of the semester
-//         COURSE_INFO courseArr[]: array of course info structure
-//     return: int numOfCourses: the number of courses a student took in a semester
-//     */
-//     int numOfCourses;
-//     printf("Please enter number of courses in semester %c: \n", semester);
-//     scanf("%d", &numOfCourses);
-//     for (int i = 0; i < numOfCourses; i++)
-//     {
-//         printf("Enter course number and grade: \n");
-//         scanf("%d %d", &courseArr[i].courseNum, &courseArr[i].grade);
-//     }
-//     return numOfCourses;
-// }
+} 
 
 void getStudentData(STUDENT *student, char semesterName)
 {
+    /*get data of a single student
+    
+    Args: 
+        STUDENT *student: struct of student to feel in 
+        char semesterName: A capital letter which represent the course name
+    return: none
+    */
     getStudentName(student->name);
     student->identity = getIDNumber();
-    // student->nofCourses = getNumberOfCourses(semesterName);
+    student->nofCourses = getSemesterCourses(semesterName, student->course_info);
 }
 
 void getStudentName(char fullName[])
@@ -124,4 +136,23 @@ int getIDNumber()
     printf("Enter student ID: \n");
     scanf("%d", &id);
     return id;
+}
+
+int getSemesterCourses(char semester, COURSE_INFO courseArr[])
+{
+    /*get courses data from the user of a specific semester
+
+    Args:
+        char semester: the name of the semester
+        COURSE_INFO courseArr[]: array of course info structure
+    return: int numOfCourses: the number of courses a student took in a semester
+    */
+    int numOfCourses;
+    printf("Please enter number of courses in semester %c: \n", semester);
+    scanf("%d", &numOfCourses);
+    for (int i = 0; i < numOfCourses; i++){
+        printf("Enter course number and grade: \n");
+        scanf("%d %d", &courseArr[i].courseNum, &courseArr[i].grade);
+    }
+    return numOfCourses;
 }
