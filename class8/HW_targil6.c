@@ -41,19 +41,19 @@ int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int c
     {
         numOfStudents += counter;
         counter = 0;
-        for (int j = 0; j < cols; j++)
-        {
-            if (stuData[i][j].course_info->courseNum == courseNum)
-            {
-                strcpy(stuNames[counter], "Group");
-                stuNames[counter][5] = GROUPS_NAMES[i];
-                strcat(stuNames[counter], " ");
-                strcat(stuNames[counter], stuData[i][j].name);
-                counter++;
+        for (int j = 0; j < cols; j++){
+            for (int k=0; k<stuData[i][j].nofCourses; k++){
+                if (stuData[i][j].course_info[k].courseNum == courseNum){
+                    strcpy(stuNames[counter], "Group");
+                    stuNames[counter][5] = GROUPS_NAMES[i];
+                    strcat(stuNames[counter], " ");
+                    strcat(stuNames[counter], stuData[i][j].name);
+                    counter++;
+                }
             }
         }
     }
-    return counter;
+    return numOfStudents;
 }
 
 void main()
