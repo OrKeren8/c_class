@@ -13,7 +13,9 @@
 #define GROUPS_NAMES "ABC"
 #define MAX_STRING_LEN 50
 #define NONO_NAME "Lois"
+#define BANNED_NAME "Lex"
 #define BETTER_NAME "Lane"
+#define NOT_FOUND -1
 
 typedef struct CourseInfo
 {
@@ -37,7 +39,8 @@ int getIDNumber();
 int getNumberOfCourses(char semesterName);
 int getSemesterCourses(COURSE_INFO courseArr[]);
 int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum, char stuNames[][MAX_FULL_NAME_LEN]);
-void replaceSubString(char string[], char subString[], char desireString[]);
+int subInString(char string[], char subString[]);
+void replaceSubInString(char string[], char subString[], char desireString[]);
 
 void main()
 {
@@ -58,14 +61,27 @@ void main()
     }
     printf("\n");
 
-    //replace words
     printf("Names after changing \"%s\" to \"%s\":\n", NONO_NAME, BETTER_NAME);
-    for(int i=0; i<numOfStudents; i++){
-        replaceSubString(stuNames[i], NONO_NAME, BETTER_NAME);
-    }
-    for (int i = 0; i < numOfStudents; i++){
+    
+    //replace names sub strings
+    for (int i = 0; i < numOfStudents; i++)
+        replaceSubInString(stuNames[i], NONO_NAME, BETTER_NAME);
+    for (int i = 0; i < numOfStudents; i++)
         printf("%s \n", stuNames[i]);
-    }
+    printf("\n");
+
+    //delete names with banned name
+    printf("Names after deleting names with \"%s\":\n", BANNED_NAME);
+    int counter = 0;
+    for (int i = 0; i < numOfStudents; i++)
+        if (subInString(stuNames[i], BANNED_NAME) == NOT_FOUND)
+        {
+            strcpy(stuNames[counter], stuNames[i]);
+            counter ++;
+        }
+    numOfStudents = counter;
+    for (int i = 0; i < numOfStudents; i++)
+        printf("%s \n", stuNames[i]);
     printf("\n");
 }
 
@@ -202,18 +218,18 @@ int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int c
     return numOfStudents;
 }
 
-void replaceSubString(char string[], char subString[], char desireString[])
+int subInString(char string[], char subString[])
 {
-    /*replace a substring in a string with other one 
+    /*check if a substring in a string 
     
     Args: 
-        char string[]: the string we want to modify
-        char subString[]: the sub string we want to replace
-        char desireString[]: the string we wont instead
-    return: none
+        char string[]: the string we want to check
+        char subString[]: the sub string
+    return: int i: the index of the subString or NOT_FOUND
     */
     int stringLen = strlen(string);
     int subStringLen = strlen(subString);
+    int subStringIndex;
     char subStringUnderTest[MAX_STRING_LEN] = "";
 
     for (size_t i = 0; i <= (stringLen-subStringLen); i++){
@@ -222,10 +238,31 @@ void replaceSubString(char string[], char subString[], char desireString[])
                 subStringUnderTest[c] = string[i+c];
             }
             if (strcmp(subStringUnderTest, subString) == 0){
-                for (size_t c = 0; c < subStringLen; c++){
-                    string[i+c] = desireString[c];
-                }
+                return i;
             }
         }
+    }
+    return NOT_FOUND;
+}
+
+void replaceSubInString(char string[], char subString[], char desireString[])
+{   
+    /*modify the string:
+    replace a sub string with a new one
+
+    Args:
+        char string[]: the string to modify
+        char subString[]: the sub string we want to replace
+        char desireString[]: the sub string to replace with
+    return: None    
+    */    
+    int index = subInString(string, subString);
+    int subStringLen = strlen(subString);
+
+    while(index!=NOT_FOUND){
+        for (size_t c = 0; c < subStringLen; c++){
+            string[index+c] = desireString[c];
+        }
+        index = subInString(string, subString);
     }
 }
