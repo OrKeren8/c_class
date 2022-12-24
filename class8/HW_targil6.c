@@ -44,55 +44,9 @@ int subInString(char string[], char subString[]);
 void replaceSubInString(char string[], char subString[], char desireString[]);
 void printGrades(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum, int grades[NUM_OF_GROUPS][NUM_OF_STUDENTS_IN_GROUP + 1]);
 void printCNum(int data[], int size, int offset);
-
-
-void findTopGrades(int grades[NUM_OF_STUDENTS_IN_GROUP + 1], int topGrades[], int topGradesLen)
-{   
-    int temp;
-
-    for(int j=0; j<grades[0]; j++){
-        if (topGrades[topGradesLen-1] < grades[j+1]){
-            topGrades[topGradesLen-1] = grades[j+1];
-            for (int m=topGradesLen-1; m>0; m--){    
-                if (topGrades[m] > topGrades[m-1]){
-                    temp = topGrades[m-1];
-                    topGrades[m-1] = topGrades[m];
-                    topGrades[m] = temp; 
-                }
-            }
-        }
-    }
-}
-
-void initIntArray(int intArray[], int len, int initializer)
-{
-    for (int i=0; i<len; i++){
-        intArray[i] = initializer;
-    }
-}
-
-void printTopGrades(int grades[NUM_OF_GROUPS][NUM_OF_STUDENTS_IN_GROUP + 1], int courseNumber)
-{
-    int topGrades[TOP_GRADES_LEN];
-    int i;
-
-    initIntArray(topGrades, TOP_GRADES_LEN, NOT_FOUND);
-    printf("Maximum grades in course#%d:\n", courseNumber);
-    for (i=0; i<NUM_OF_GROUPS; i++){
-        findTopGrades(grades[i], topGrades, TOP_GRADES_LEN);
-        printf("Group%c: ", GROUPS_NAMES[i]);
-        if (topGrades[0] == NOT_FOUND){
-            printf("no grades found in group\n");
-        }
-        else if (topGrades[1] == NOT_FOUND){
-            printf("max grade is: %d (no second max found)\n", topGrades[0]);
-        }
-        else{
-            printf("max grade is: %d and second max is: %d\n", topGrades[0], topGrades[1]);
-        }
-        initIntArray(topGrades, TOP_GRADES_LEN, NOT_FOUND);
-    }
-}
+void findTopGrades(int grades[], int topGrades[], int topGradesLen);
+void initIntArray(int intArray[], int len, int initializer);
+void printTopGrades(int grades[][NUM_OF_STUDENTS_IN_GROUP + 1], int courseNumber);
 
 
 void main()
@@ -379,3 +333,73 @@ void printGrades(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols
     }
 }
 
+
+void findTopGrades(int grades[], int topGrades[], int topGradesLen)
+{ 
+    /*this function fined the top grades with in a list
+
+    Args:
+        int grades[]: and array of integers
+        int topGrades[]: an array of integers to fill in with the top grades
+        int topGradesLen: the amount of grades to fill in 
+    return: none
+    */  
+    int temp;
+
+    for(int j=0; j<grades[0]; j++){
+        if (topGrades[topGradesLen-1] < grades[j+1]){
+            topGrades[topGradesLen-1] = grades[j+1];
+            for (int m=topGradesLen-1; m>0; m--){    
+                if (topGrades[m] > topGrades[m-1]){
+                    temp = topGrades[m-1];
+                    topGrades[m-1] = topGrades[m];
+                    topGrades[m] = temp; 
+                }
+            }
+        }
+    }
+}
+void initIntArray(int intArray[], int len, int initializer)
+{
+    /*initialize an array of integers with input value
+
+    Args:
+        int intArray[]: the array to initialize
+        int len: the length of the array
+        int initializer: the value to initialize with
+    return: none
+    */
+    for (int i=0; i<len; i++){
+        intArray[i] = initializer;
+    }
+}
+
+void printTopGrades(int grades[][NUM_OF_STUDENTS_IN_GROUP + 1], int courseNumber)
+{
+    /*prints the top grades of each group of students
+
+    Args:   
+        int grades[][NUM_OF_STUDENTS_IN_GROUP + 1]: two dimension array of grades
+        int courseNumber: the number of the current course    
+    return: none
+    */
+    int topGrades[TOP_GRADES_LEN];
+    int i;
+
+    initIntArray(topGrades, TOP_GRADES_LEN, NOT_FOUND);
+    printf("Maximum grades in course#%d:\n", courseNumber);
+    for (i=0; i<NUM_OF_GROUPS; i++){
+        findTopGrades(grades[i], topGrades, TOP_GRADES_LEN);
+        printf("Group%c: ", GROUPS_NAMES[i]);
+        if (topGrades[0] == NOT_FOUND){
+            printf("no grades found in group\n");
+        }
+        else if (topGrades[1] == NOT_FOUND){
+            printf("max grade is: %d (no second max found)\n", topGrades[0]);
+        }
+        else{
+            printf("max grade is: %d and second max is: %d\n", topGrades[0], topGrades[1]);
+        }
+        initIntArray(topGrades, TOP_GRADES_LEN, NOT_FOUND);
+    }
+}
