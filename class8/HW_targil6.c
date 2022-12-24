@@ -16,6 +16,7 @@
 #define BANNED_NAME "Lex"
 #define BETTER_NAME "Lane"
 #define NOT_FOUND -1
+#define TOP_GRADES_LEN 2
 
 typedef struct CourseInfo
 {
@@ -25,7 +26,7 @@ typedef struct CourseInfo
 
 typedef struct Student
 {
-    char name[MAX_NAME_LEN];
+    char name[MAX_FULL_NAME_LEN];
     int identity;
     int nofCourses; // number of courses taken in semesterA
     COURSE_INFO course_info[MAX_COURSES];
@@ -43,6 +44,56 @@ int subInString(char string[], char subString[]);
 void replaceSubInString(char string[], char subString[], char desireString[]);
 void printGrades(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols, int courseNum, int grades[NUM_OF_GROUPS][NUM_OF_STUDENTS_IN_GROUP + 1]);
 void printCNum(int data[], int size, int offset);
+
+
+void findTopGrades(int grades[NUM_OF_STUDENTS_IN_GROUP + 1], int topGrades[], int topGradesLen)
+{   
+    int temp;
+
+    for(int j=0; j<grades[0]; j++){
+        if (topGrades[topGradesLen-1] < grades[j+1]){
+            topGrades[topGradesLen-1] = grades[j+1];
+            for (int m=topGradesLen-1; m>0; m--){    
+                if (topGrades[m] > topGrades[m-1]){
+                    temp = topGrades[m-1];
+                    topGrades[m-1] = topGrades[m];
+                    topGrades[m] = temp; 
+                }
+            }
+        }
+    }
+}
+
+void initIntArray(int intArray[], int len, int initializer)
+{
+    for (int i=0; i<len; i++){
+        intArray[i] = initializer;
+    }
+}
+
+void printTopGrades(int grades[NUM_OF_GROUPS][NUM_OF_STUDENTS_IN_GROUP + 1], int courseNumber)
+{
+    int topGrades[TOP_GRADES_LEN];
+    int i;
+
+    initIntArray(topGrades, TOP_GRADES_LEN, NOT_FOUND);
+    printf("Maximum grades in course#%d:\n", courseNumber);
+    for (i=0; i<NUM_OF_GROUPS; i++){
+        findTopGrades(grades[i], topGrades, TOP_GRADES_LEN);
+        printf("Group%c: ", GROUPS_NAMES[i]);
+        if (topGrades[0] == NOT_FOUND){
+            printf("no grades found in group\n");
+        }
+        else if (topGrades[1] == NOT_FOUND){
+            printf("max grade is: %d (no second max found)\n", topGrades[0]);
+        }
+        else{
+            printf("max grade is: %d and second max is: %d\n", topGrades[0], topGrades[1]);
+        }
+        initIntArray(topGrades, TOP_GRADES_LEN, NOT_FOUND);
+    }
+}
+
 
 void main()
 {
@@ -88,6 +139,9 @@ void main()
 
     int grades[NUM_OF_GROUPS][NUM_OF_STUDENTS_IN_GROUP + 1] = {0};
     printGrades(groups, NUM_OF_GROUPS, NUM_OF_STUDENTS_IN_GROUP, courseNum, grades);
+    printf("\n");
+
+    printTopGrades(grades, courseNum);
 
 }
 
@@ -203,13 +257,11 @@ int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int c
         int cols:number of cols in students array
         int courseNum: the number of the course we check
         char stuNames[][MAX_FULL_NAME_LEN]: array of strings to fell in the names of the students
-    return: int numOfStudents: the number of students that learned the course
+    return: int counter: the number of students that learned the course
     */
-    int counter = 0, numOfStudents = 0;
+    int counter = 0;
     for (int i = 0; i < rows; i++)
     {
-        numOfStudents += counter;
-        counter = 0;
         for (int j = 0; j < cols; j++){
             for (int k=0; k<stuData[i][j].nofCourses; k++){
                 if (stuData[i][j].course_info[k].courseNum == courseNum){
@@ -222,7 +274,7 @@ int getStudentNames(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int c
             }
         }
     }
-    return numOfStudents;
+    return counter;
 }
 
 int subInString(char string[], char subString[])
@@ -236,12 +288,11 @@ int subInString(char string[], char subString[])
     */
     int stringLen = strlen(string);
     int subStringLen = strlen(subString);
-    int subStringIndex;
     char subStringUnderTest[MAX_STRING_LEN] = "";
 
-    for (size_t i = 0; i <= (stringLen-subStringLen); i++){
+    for (int i = 0; i <= (stringLen-subStringLen); i++){
         if (string[i] == subString[0]){
-            for (size_t c = 0; c < subStringLen; c++){
+            for (int c = 0; c < subStringLen; c++){
                 subStringUnderTest[c] = string[i+c];
             }
             if (strcmp(subStringUnderTest, subString) == 0){
@@ -267,7 +318,7 @@ void replaceSubInString(char string[], char subString[], char desireString[])
     int subStringLen = strlen(subString);
 
     while(index!=NOT_FOUND){
-        for (size_t c = 0; c < subStringLen; c++){
+        for (int c = 0; c < subStringLen; c++){
             string[index+c] = desireString[c];
         }
         index = subInString(string, subString);
@@ -327,3 +378,4 @@ void printGrades(STUDENT stuData[][NUM_OF_STUDENTS_IN_GROUP], int rows, int cols
             printf("\n");
     }
 }
+
