@@ -380,6 +380,7 @@ void fillMaxPrefixesArray(int numbers[], int n, int maxPrefixesArray[])
 
     if (n == 1)
     {
+        maxPrefixesArray[n-1] = numbers[n-1];
         return;
     }
     fillMaxPrefixesArray(numbers, n - 1, maxPrefixesArray);
