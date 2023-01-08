@@ -14,6 +14,9 @@ int biggestLowPower(int x, int num);
 int partSum(int num);
 void intToStr(int num, char s[]);
 void fillMaxPrefixesArray(int numbers[], int n, int maxPrefixesArray[]);
+void getMinToStart(int numbers[], int n);
+void combineArrays(int sortedArr1[], int size1, int sortedArr2[], int size2);
+int countSmaller(int arr[], int start, int end, int num);
 
 // Testing functions
 int readArray(int data[], int maxSize);
@@ -26,9 +29,9 @@ void checkQ3();
 void checkQ4();
 void checkQ5();
 void checkQ6();
-// void checkQ7();
-// void checkQ8();
-// void checkQ9();
+void checkQ7();
+void checkQ8();
+void checkQ9();
 
 /*********** main - don't make any changes here !!! ***************************/
 void main()
@@ -61,15 +64,15 @@ void main()
         case 6:
             checkQ6();
             break;
-        // case 7:
-        //     checkQ7();
-        //     break;
-        // case 8:
-        //     checkQ8();
-        //     break;
-        // case 9:
-        //     checkQ9();
-        //     break;
+        case 7:
+            checkQ7();
+            break;
+        case 8:
+            checkQ8();
+            break;
+        case 9:
+            checkQ9();
+            break;
         case EXIT:
             exit = true;
             break;
@@ -149,52 +152,52 @@ void checkQ6()
     printArray(maxPrefixes, size);
 }
 
-// void checkQ7()
-// {
-//     int numbers[SIZE];
-//     int size;
+void checkQ7()
+{
+    int numbers[SIZE];
+    int size;
 
-//     size = readArray(numbers, SIZE);
-//     getMinToStart(numbers, size);
-//     printf("The minimal number is: %d\n", numbers[0]);
+    size = readArray(numbers, SIZE);
+    getMinToStart(numbers, size);
+    printf("The minimal number is: %d\n", numbers[0]);
 
-//     // check if all other numbers are still inb array
-//     bubbleSort(numbers, size);
-//     printf("The sorted array: ");
-//     printArray(numbers, size);
-// }
+    // check if all other numbers are still inb array
+    bubbleSort(numbers, size);
+    printf("The sorted array: ");
+    printArray(numbers, size);
+}
 
-// void checkQ8()
-// {
-//     int arr1[SIZE], arr2[2 * SIZE];
-//     int size1, size2;
+void checkQ8()
+{
+    int arr1[SIZE], arr2[2 * SIZE];
+    int size1, size2;
 
-//     size1 = readArray(arr1, SIZE);
-//     size2 = readArray(arr2, 2 * SIZE - size1);
+    size1 = readArray(arr1, SIZE);
+    size2 = readArray(arr2, 2 * SIZE - size1);
 
-//     // sort arrays
-//     bubbleSort(arr1, size1);
-//     bubbleSort(arr2, size2);
+    // sort arrays
+    bubbleSort(arr1, size1);
+    bubbleSort(arr2, size2);
 
-//     combineArrays(arr1, size1, arr2, size2);
-//     printf("The combined sorted array: ");
-//     printArray(arr2, size1 + size2);
-// }
+    combineArrays(arr1, size1, arr2, size2);
+    printf("The combined sorted array: ");
+    printArray(arr2, size1 + size2);
+}
 
-// void checkQ9()
-// {
-//     int numbers[SIZE];
-//     int size, num;
+void checkQ9()
+{
+    int numbers[SIZE];
+    int size, num;
 
-//     // read numbers from user (assumption: numbers are different from each other)
-//     size = readArray(numbers, SIZE);
-//     bubbleSort(numbers, size);
+    // read numbers from user (assumption: numbers are different from each other)
+    size = readArray(numbers, SIZE);
+    bubbleSort(numbers, size);
 
-//     printf("Please enter an integer: ");
-//     scanf("%d", &num);
+    printf("Please enter an integer: ");
+    scanf("%d", &num);
 
-//     printf("There are %d numbers in array that are smaller than %d\n", countSmaller(numbers, 0, size - 1, num), num);
-// }
+    printf("There are %d numbers in array that are smaller than %d\n", countSmaller(numbers, 0, size - 1, num), num);
+}
 
 // This function reads a series of integers from user into data array.
 // The function will first ask the user to enter the number of integers he wishes
@@ -377,10 +380,17 @@ void intToStr(int num, char s[])
 
 void fillMaxPrefixesArray(int numbers[], int n, int maxPrefixesArray[])
 {
+    /*get a list of numbers and fill in maxPrefixesArray[i] the max number from numbers[0] to numbers[i]
 
+    Args:
+        int numbers[]: list of numbers
+        int n: len of numbers to check within the list
+        int maxPrefixesArray[]: output list
+    return: none
+    */
     if (n == 1)
     {
-        maxPrefixesArray[n-1] = numbers[n-1];
+        maxPrefixesArray[n - 1] = numbers[n - 1];
         return;
     }
     fillMaxPrefixesArray(numbers, n - 1, maxPrefixesArray);
@@ -391,5 +401,82 @@ void fillMaxPrefixesArray(int numbers[], int n, int maxPrefixesArray[])
     else
     {
         maxPrefixesArray[n - 1] = maxPrefixesArray[n - 2];
+    }
+}
+
+void getMinToStart(int numbers[], int n)
+{
+    /*this function place the minimum number at the first spot of a given list
+
+    Args:
+        int numbers[]: array of numbers to find the minimum from
+        int n: len of the array
+    return: none
+    */
+    if (n < 2)
+    {
+        return;
+    }
+    if (numbers[0] > numbers[n - 1])
+    {
+        swap(numbers, 0, n - 1);
+    }
+    getMinToStart(numbers, n - 1);
+}
+
+void combineArrays(int sortedArr1[], int size1, int sortedArr2[], int size2)
+{
+    /*this function combine two sorted arrays into one
+
+    Args:
+        int sortedArr1[]: first sorted array
+        int size1: len of sortedArr1[]
+        int sortedArr2[]: second sorted array ,the one to fill in the combination of the two arrays
+        int size2: initiate len of sortedArr2[]
+    return: none
+    */
+    int i;
+    if (size1 == 0)
+    {
+        return;
+    }
+    sortedArr2[size2] = sortedArr1[size1 - 1];
+    size2++;
+    size1--;
+    for (i = size2 - 1; i > 0; i--)
+    {
+        if (sortedArr2[i] < sortedArr2[i - 1])
+        {
+            swap(sortedArr2, i, i - 1);
+        }
+    }
+    combineArrays(sortedArr1, size1, sortedArr2, size2);
+}
+
+int countSmaller(int arr[], int start, int end, int num)
+{
+    /*this function search how many numbers under a specific number2 in a given array
+
+    Args:
+        int arr[]: array of sorted numbers
+        int start: start index of the array
+        int end: stop index of the array
+        int num: the number to compare with
+    return: int: counter represent the amount of numbers that are smaller than "num"
+
+    */
+    int mid = (end + 1 + start) / 2;
+
+    if (end < start)
+    {
+        return 0;
+    }
+    if (num > arr[mid])
+    {
+        return ((mid + 1 - start) + countSmaller(arr, mid + 1, end, num));
+    }
+    else
+    {
+        return countSmaller(arr, start, mid - 1, num);
     }
 }
