@@ -7,12 +7,27 @@
 #include <time.h>	// in order to use "time" function
 
 
+typedef struct playerInfo{
+
+}PLAYER_INFO;
+
+typedef struct card{
+    int index;
+    char color;
+}CARD;
+
+typedef struct player{
+    PLAYER_INFO playerInfo;
+    CARD *cardsArr;
+}PLAYER;
+
 void introductionPrint();
 int getNumOfPlayers();
 
 void main()
 {
     int numOfPlayers;
+
 
     introductionPrint();
     numOfPlayers = getNumOfPlayers();
