@@ -20,6 +20,8 @@ void main()
 	// For example, if we want a random number between 0 to 9:
 	num = rand() % 10;
 	printf("First number: %d\n", num);
+    num = rand() % 10;
+	printf("First number: %d\n", num);
 	
 	// If we want a random number between 0 to 20:
 	num = rand() % 21;
