@@ -2,9 +2,7 @@
 #include <stdlib.h>
 
 #define SIZE 100
-#define ASCEND 1
-// #define ERROR 1
-// #define SUCCESS 0
+#define DESCEND 1
 
 int **pointerSort(int *arr, unsigned int size, int ascend_flag);
 void pointerMergeSort(int **pPointersArr, unsigned int size);
@@ -21,14 +19,12 @@ void main()
     int **pointers;
     int ascend_flag;
 
-    printf("Please enter the number of items:\n");
     scanf("%u", &size);
 
     for (i = 0; i < size; i++)
         scanf("%d", &arr[i]);
     scanf("%d", &ascend_flag);
     pointers = pointerSort(arr, size, ascend_flag);
-    printf("The sorted array:\n"); // Print the sorted array
     printPointers(pointers, size);
     free(pointers);
 }
@@ -52,7 +48,7 @@ int **pointerSort(int *arr, unsigned int size, int ascend_flag)
     pointerMergeSort(pPointersArr, size);
 
     // flip array if necessary
-    if (ascend_flag == ASCEND)
+    if (ascend_flag != DESCEND)
     {
         flipArr(pPointersArr, size);
     }
@@ -137,9 +133,9 @@ void printPointers(int **pointers, unsigned int size)
 {
     for (unsigned int i = 0; i < size; i++)
     {
-        printf("%d, ", *pointers[i]);
+        printf("%d ", *pointers[i]);
     }
-    printf("\n");
+    // printf("\n");
 }
 
 void flipArr(int **pPointersArr, unsigned int size)
