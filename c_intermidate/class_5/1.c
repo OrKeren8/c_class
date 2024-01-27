@@ -27,47 +27,75 @@ BOOL isEmptyList(LIST *lst);
 void insertDataToEndList(LIST *lst, int data);
 LNODE *createNewListNode(int data, LNODE *next);
 void insertNodeToEndList(LIST *lst, LNODE *tail);
+LNODE *getMaxIter(LIST *lst);
+void printMax(LNODE *node);
+LNODE *getMaxRec1(LIST *lst);
 
 void main(void)
 {
-    LIST lst1, lst2, lst3, lst4;
+    LIST lst1;
     LNODE n4 = {4, NULL};
-    LNODE n3 = {3, &n4};
+    LNODE n3 = {13, &n4};
     LNODE n2 = {2, &n3};
     LNODE n1 = {1, &n2};
-
-    LNODE n24 = {4, NULL};
-    LNODE n23 = {3, &n24};
-    LNODE n22 = {2, &n23};
-    LNODE n21 = {1, &n22};
-    BOOL res;
+    LNODE *max;
 
     lst1.head = &n1;
     lst1.tail = &n4;
 
-    lst2.head = &n21;
-    lst2.tail = &n24;
+    max = getMaxIter(&lst1);
+    printMax(max);
 
-    printList(&lst1);
+    max = getMaxRec1(&lst1);
+    printMax(max);
 
-    res = isEqual(&lst1, &lst2);
-    if (res == TRUE)
-        printf("Equal\n");
+    // max = getMaxRec2(&lst1);
+    // printMax(max);
+}
+
+LNODE *getMaxRec1(LIST *list)
+{
+    LIST slist;
+    LNODE *maxNode;
+
+    if (isEmptyList(list) == NULL)
+        return NULL;
     else
-        printf("Not Equal\n");
+    {        
+        slist.head = list->head->next;
+        slist.tail = list->tail;
 
-    lst3 = copyList(&lst1);
+        maxNode = getMaxRec1(&slist);
+        if ((maxNode != NULL) && (maxNode->data > list->head->data))
+        {
+            return maxNode;
+        }
+        else
+        {
+            return list->head;
+        }
+    }
+}
 
-    printList(&lst3);
+void printMax(LNODE *node)
+{
+    printf("%d\n", node->data);
+}
 
-    res = isEqual(&lst1, &lst3);
-    if(res == TRUE)
-    	printf("Equal\n");
-    else
-    	printf("Not Equal\n");
+LNODE *getMaxIter(LIST *lst)
+{
+    LNODE *currNode, *maxNode;
+    currNode = maxNode = lst->head;
 
-    lst4 = listConcat(&lst1, &lst3);
-    printList(&lst4);
+    while (currNode != NULL)
+    {
+        if (currNode->data > maxNode->data)
+        {
+            maxNode = currNode;
+        }
+        currNode = currNode->next;
+    }
+    return maxNode;
 }
 
 void printList(LIST *lst)
@@ -110,10 +138,11 @@ BOOL isEqual(LIST *lst1, LIST *lst2)
     return isEqual;
 }
 
-LIST copyList(LIST *lst){
+LIST copyList(LIST *lst)
+{
     LIST res;
     LNODE *curr = lst->head;
-    
+
     makeEmptyList(&res);
     while (curr != NULL)
     {
@@ -123,60 +152,67 @@ LIST copyList(LIST *lst){
     return res;
 }
 
-LNODE* createNewListNode(int data, LNODE * next)
+LNODE *createNewListNode(int data, LNODE *next)
 {
-	LNODE * res;
-	res = (LNODE*) malloc (sizeof(LNODE));
-	res->data = data;
-	res->next = next;
-	return res;
+    LNODE *res;
+    res = (LNODE *)malloc(sizeof(LNODE));
+    res->data = data;
+    res->next = next;
+    return res;
 }
 
 BOOL isEmptyList(LIST *lst)
 {
-	if(lst->head == NULL)
-		return TRUE;
-	else
-		return FALSE;
+    if (lst->head == NULL)
+        return TRUE;
+    else
+        return FALSE;
 }
 
 void insertDataToEndList(LIST *lst, int data)
 {
-	LNODE * newTail;
-	newTail = createNewListNode(data, NULL);
-	insertNodeToEndList(lst, newTail);
+    LNODE *newTail;
+    newTail = createNewListNode(data, NULL);
+    insertNodeToEndList(lst, newTail);
 }
-void insertNodeToEndList(LIST *lst, LNODE * tail)
+void insertNodeToEndList(LIST *lst, LNODE *tail)
 {
-	if (isEmptyList(lst) == TRUE){
-		lst->head = lst->tail = tail;
-	}
-	else{
-		lst->tail->next = tail;
-		lst->tail = tail;
-	}		
-	tail->next = NULL;
+    if (isEmptyList(lst) == TRUE)
+    {
+        lst->head = lst->tail = tail;
+    }
+    else
+    {
+        lst->tail->next = tail;
+        lst->tail = tail;
+    }
+    tail->next = NULL;
 }
 
 void makeEmptyList(LIST *lst)
 {
-	lst->head = NULL;
-	lst->tail = NULL;
+    lst->head = NULL;
+    lst->tail = NULL;
 }
 
-LIST listConcat(LIST *l1, LIST *l2){
+LIST listConcat(LIST *l1, LIST *l2)
+{
     LIST res;
 
-    if(isEmptyList(l1) == TRUE && isEmptyList(l2 == TRUE)){
+    if (isEmptyList(l1) == TRUE && isEmptyList(l2 == TRUE))
+    {
         makeEmptyList(&res);
     }
-    else if(isEmptyList(l1) == TRUE){
+    else if (isEmptyList(l1) == TRUE)
+    {
         res = *l2;
     }
-    else if(isEmptyList(l2) == TRUE){
+    else if (isEmptyList(l2) == TRUE)
+    {
         res = *l1;
     }
-    else{
+    else
+    {
         l1->tail->next = l2->head;
         res.head = l1->head;
         res.tail = l2->tail;
