@@ -19,16 +19,18 @@ void disposeDuplicatePositions(chessPosList* lst)
     */
     int chessBord[8][8] = { 0 };
     int row, col;
-    chessPosCell* currCell = lst->head;
+    chessPosCell *currCell = lst->head, *nextCell;
 
     while (currCell != NULL)
     {
+        nextCell = currCell->next;
         row = currCell->position[0] - 'A';
         col = currCell->position[1] - '1';
         if (chessBord[row][col] == 0)
             chessBord[row][col] = 1;
         else
             deleteNodeFromList(lst, currCell);
+       currCell = nextCell;
     }
 }
 
@@ -71,5 +73,7 @@ void freeNode(chessPosCell* nodeToDelete)
         ListNode *nodeToDelete: the node to free up
     Return: NULL
     */
-    free(nodeToDelete);
+
+    //for now there is only static list in main so do nothing
+    //free(nodeToDelete);
 }

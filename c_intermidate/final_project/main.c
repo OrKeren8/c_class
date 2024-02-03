@@ -28,7 +28,7 @@ int main()
     chessPosCell c1 = { {'A', '4'}, &c2 };
     chessPosList cellList = { &c1, &c6 };
 
-    // display(&cellList);
+    display(&cellList);
 
     return 0;
 }
