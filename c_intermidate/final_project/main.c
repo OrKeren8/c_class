@@ -1,8 +1,8 @@
-#include <stdlib.h>
+﻿#include <stdlib.h>
 #include <stdio.h>
 #include "common.h"
 #include "q1.h"
-//#include "q2.h"
+#include "q2.h"
 
 int main()
 {
@@ -29,6 +29,7 @@ int main()
     chessPosList cellList = { &c1, &c6 };
 
     display(&cellList);
+
 
     return 0;
 }

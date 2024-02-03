@@ -2,7 +2,7 @@
 #define COMMON_H
 
 
-#define chessSize 8;
+#define CHESS_SIZE 8
 
 typedef char chessPos[2];
 

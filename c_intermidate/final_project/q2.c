@@ -3,9 +3,25 @@
 #include "common.h"
 #include "q2.h"
 
+
 void display(chessPosList* lst)
 {
+    /*display list of pone positions
+    
+    Args:
+        chessPosList* lst: list of pone movements;
+    Return: NULL
+    */
+    chessPosCell* curr = lst->head;
+    int chessBoard[CHESS_SIZE][CHESS_SIZE] = {0}, counter=1;
+    
     disposeDuplicatePositions(lst);
+    while (curr != NULL) {
+        chessBoard[curr->position[0] - 'A'][curr->position[1] - '1'] = counter;
+        counter++;
+        curr = curr->next;
+    }
+    drawChessBoard(chessBoard);
 }
 
 void disposeDuplicatePositions(chessPosList* lst)
@@ -17,10 +33,11 @@ void disposeDuplicatePositions(chessPosList* lst)
         chessPosList *lst: list of chess board positions
     Return: NULL
     */
-    int chessBord[8][8] = { 0 };
+    int chessBord[CHESS_SIZE][CHESS_SIZE] = { 0 };
     int row, col;
     chessPosCell *currCell = lst->head, *nextCell;
 
+    printf("Chess Bord: \n");
     while (currCell != NULL)
     {
         nextCell = currCell->next;
@@ -75,5 +92,28 @@ void freeNode(chessPosCell* nodeToDelete)
     */
 
     //for now there is only static list in main so do nothing
-    //free(nodeToDelete);
+}
+
+void drawChessBoard(int chessMatrix[][CHESS_SIZE]) {
+    /*draw a chess board with data of chess positions in it
+
+    Args:
+        int chessMatrix[CHESS_SIZE][]: matrix with all of the positions of a specific pone move
+    Return: NULL
+    */
+    for (int i = 0; i < CHESS_SIZE; i++) {
+        for (int j = 0; j < CHESS_SIZE; j++)
+            printf("#####");
+        printf("#\n#");
+        for (int j = 0; j < CHESS_SIZE; j++) {
+            if (chessMatrix[i][j] != 0)
+                printf(" %2d #", chessMatrix[i][j]);
+            else
+                printf("    #");
+        }
+        printf("\n");
+    }
+    for (int j = 0; j < CHESS_SIZE; j++)
+        printf("#####");
+    printf("#\n");
 }
