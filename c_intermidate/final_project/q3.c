@@ -125,8 +125,6 @@ void findAllPossibleKnightPathsHelper(treeNode *node, chessPosArray ***allMoves,
         }
         newNode->next_possible_positions.head = NULL;
         newNode->next_possible_positions.tail = NULL;
-        newNode->position[0] = allMoves[row][col]->positions[i][0];
-        newNode->position[1] = allMoves[row][col]->positions[i][1];
         treeNodeListCell *newCell = (treeNodeListCell *)malloc(sizeof(treeNodeListCell));
         newCell->node = newNode;
         newCell->next = NULL;
@@ -148,10 +146,11 @@ void findAllPossibleKnightPathsHelper(treeNode *node, chessPosArray ***allMoves,
 pathTree findAllPossibleKnightPaths(chessPos *startingPosition)
 {
     pathTree tree;
-    tree.root = (treeNode *)calloc(1, sizeof(treeNode));
-    tree.root->position[0] = *startingPosition[0];
-    tree.root->position[1] = (*startingPosition)[1];
-    
+    tree.root = (treeNode *)malloc(sizeof(treeNode));
+    tree.root->position[0] = startingPosition[0];
+    tree.root->position[1] = startingPosition[1];
+    tree.root->next_possible_positions.head = NULL;
+    tree.root->next_possible_positions.tail = NULL;
 
     chessPosArray ***allMoves = validKnightMoves();
     bool visited[BOARD_SIZE][BOARD_SIZE] = {false};
