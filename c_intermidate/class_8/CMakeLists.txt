@@ -6,3 +6,4 @@ project(
 
 add_subdirectory(lab)   # look in hello subdirectory for CMakeLists.txt to process
 add_subdirectory(apps)    # look in apps subdirectory for CMakeLists.txt to process
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ADDITIONAL_CFLAGS} -g")

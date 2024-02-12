@@ -11,3 +11,4 @@ target_link_libraries(main
 
 # Tell C++ compiler to use C++20 features. We don't actually use any of them.
 target_compile_features(main PUBLIC cxx_std_20)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ADDITIONAL_CFLAGS} -g")
