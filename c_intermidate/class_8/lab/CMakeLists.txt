@@ -8,3 +8,4 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 target_compile_features(lab PUBLIC cxx_std_20)
+set(CMAKE_BUILD_TYPE Debug)
