@@ -8,7 +8,7 @@
 
 int main()
 {
-    /*chessPosArray*** allMoves = validKnightMoves();
+    chessPosArray*** allMoves = validKnightMoves();
 
     // Example: Print all valid moves for the knight at position (2, 3)
     printf("Valid moves for the knight at position (C,4) AKA (3,4):\n");
@@ -19,7 +19,7 @@ int main()
 
     // Free allocated memory
     freeAllMoves(allMoves);
-    */
+    
 
     ////////for exercise 2/////////
     // here a list of positions with duplicates:
@@ -34,10 +34,10 @@ int main()
     display(&cellList);
 
     
-    chessPos startingPosition = { 'A', '1' };
-
-
-    pathTree tree = findAllPossibleKnightPaths(startingPosition);
+    chessPos startingPosition;
+    startingPosition[0] = 'A';
+    startingPosition[1] = '1';
+    pathTree tree = findAllPossibleKnightPaths(&startingPosition);
 
     return 0;
 }

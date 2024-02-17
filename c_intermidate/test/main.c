@@ -170,6 +170,7 @@ pathTree findAllPossibleKnightPaths(chessPos* startingPosition)
 }
 
 // main
+
 int main()
 {
     chessPos startingPosition;
