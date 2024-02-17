@@ -1,5 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "common.h"
 #include "q2.h"
 
@@ -13,7 +11,7 @@ void display(chessPosList* lst)
     Return: NULL
     */
     chessPosCell* curr = lst->head;
-    int chessBoard[CHESS_SIZE][CHESS_SIZE] = {0}, counter=1;
+    int chessBoard[BOARD_SIZE][BOARD_SIZE] = {0}, counter=1;
     
     disposeDuplicatePositions(lst);
     while (curr != NULL) {
@@ -33,7 +31,7 @@ void disposeDuplicatePositions(chessPosList* lst)
         chessPosList *lst: list of chess board positions
     Return: NULL
     */
-    int chessBord[CHESS_SIZE][CHESS_SIZE] = { 0 };
+    int chessBord[BOARD_SIZE][BOARD_SIZE] = { 0 };
     int row, col;
     chessPosCell *currCell = lst->head, *nextCell;
 
@@ -94,18 +92,18 @@ void freeNode(chessPosCell* nodeToDelete)
     //for now there is only static list in main so do nothing
 }
 
-void drawChessBoard(int chessMatrix[][CHESS_SIZE]) {
+void drawChessBoard(int chessMatrix[][BOARD_SIZE]) {
     /*draw a chess board with data of chess positions in it
 
     Args:
-        int chessMatrix[CHESS_SIZE][]: matrix with all of the positions of a specific pone move
+        int chessMatrix[BOARD_SIZE][]: matrix with all of the positions of a specific pone move
     Return: NULL
     */
-    for (int i = 0; i < CHESS_SIZE; i++) {
-        for (int j = 0; j < CHESS_SIZE; j++)
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++)
             printf("#####");
         printf("#\n#");
-        for (int j = 0; j < CHESS_SIZE; j++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
             if (chessMatrix[i][j] != 0)
                 printf(" %2d #", chessMatrix[i][j]);
             else
@@ -113,7 +111,7 @@ void drawChessBoard(int chessMatrix[][CHESS_SIZE]) {
         }
         printf("\n");
     }
-    for (int j = 0; j < CHESS_SIZE; j++)
+    for (int j = 0; j < BOARD_SIZE; j++)
         printf("#####");
     printf("#\n");
 }

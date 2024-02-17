@@ -3,6 +3,11 @@
 #include "common.h"
 #include "q1.h"
 #include "q2.h"
+#include "q3.h"
+
+void mo(chessPosArray*** koko) {
+    return;
+}
 
 int main()
 {
@@ -18,6 +23,7 @@ int main()
     // Free allocated memory
     freeAllMoves(allMoves);
 
+
     ////////for exercise 2/////////
     // here a list of positions with duplicates:
     chessPosCell c6 = { {'E', '1'}, NULL };
@@ -30,6 +36,11 @@ int main()
 
     display(&cellList);
 
+    
+    chessPos startingPosition = { 'A', '1' };
+    allMoves = validKnightMoves();
+    mo(allMoves);
+    pathTree tree = findAllPossibleKnightPaths(startingPosition);
 
     return 0;
 }
