@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 
-#define BOARD_SIZE 4
+#define BOARD_SIZE 8
 
 
 typedef char chessPos[2];

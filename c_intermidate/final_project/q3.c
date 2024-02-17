@@ -38,9 +38,11 @@ pathTree findAllPossibleKnightPaths(chessPos* startingPosition)
     tree.root->position[0] = (*startingPosition)[0];
     tree.root->position[1] = (*startingPosition)[1];
 
-    chessPosArray*** momo = validKnightMoves();
-    printf("%x\n", momo);
+    chessPosArray*** allMoves = validKnightMoves();
     bool visited[BOARD_SIZE][BOARD_SIZE] = { false };
-    findAllPossibleKnightPathsHelper(tree.root, momo, visited);
+    findAllPossibleKnightPathsHelper(tree.root, allMoves, visited);
     return tree;
 }
+
+
+

@@ -5,13 +5,10 @@
 #include "q2.h"
 #include "q3.h"
 
-void mo(chessPosArray*** koko) {
-    return;
-}
 
 int main()
 {
-    chessPosArray*** allMoves = validKnightMoves();
+    /*chessPosArray*** allMoves = validKnightMoves();
 
     // Example: Print all valid moves for the knight at position (2, 3)
     printf("Valid moves for the knight at position (C,4) AKA (3,4):\n");
@@ -22,7 +19,7 @@ int main()
 
     // Free allocated memory
     freeAllMoves(allMoves);
-
+    */
 
     ////////for exercise 2/////////
     // here a list of positions with duplicates:
@@ -38,8 +35,8 @@ int main()
 
     
     chessPos startingPosition = { 'A', '1' };
-    allMoves = validKnightMoves();
-    mo(allMoves);
+
+
     pathTree tree = findAllPossibleKnightPaths(startingPosition);
 
     return 0;
